@@ -1,6 +1,6 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC # 05 — Bronze Ingestion: Claims
+# MAGIC # 06 — Bronze Ingestion: Payments
 
 # COMMAND ----------
 
@@ -12,9 +12,9 @@ RAW_BASE_PATH = f"{S3_BUCKET}/raw"
 CATALOG_NAME = "insurance_lakehouse_project_felipe"
 BRONZE_SCHEMA = "bronze"
 
-DATASET_NAME = "claims"
-RAW_PATH = f"{RAW_BASE_PATH}/claims"
-BRONZE_TABLE = f"{CATALOG_NAME}.{BRONZE_SCHEMA}.bronze_claims"
+DATASET_NAME = "payments"
+RAW_PATH = f"{RAW_BASE_PATH}/payments"
+BRONZE_TABLE = f"{CATALOG_NAME}.{BRONZE_SCHEMA}.bronze_payments"
 ingest_run_id = str(uuid.uuid4())
 
 print("Raw path:", RAW_PATH)
@@ -28,7 +28,7 @@ bronze_df = (
     .withColumn("ingest_timestamp", F.current_timestamp())
     .withColumn("ingest_run_id", F.lit(ingest_run_id))
     .withColumn("source_file_name", F.expr("_metadata.file_path"))
-)
+    )
 
 bronze_df.write.format("delta").mode("overwrite").saveAsTable(BRONZE_TABLE)
 
